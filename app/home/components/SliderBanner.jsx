@@ -73,7 +73,7 @@ function SliderBanner({ data = featuredJobs }) {
       //   />
       // }
     >
-      {data.map((banner, i) => (
+      {data.map((banner) => (
         <Carousel.Item key={banner.id} className='position-relative bg-danger'>
           <Image
             style={{ aspectRatio: 16 / 9, width: '100%', objectFit: 'cover' }}

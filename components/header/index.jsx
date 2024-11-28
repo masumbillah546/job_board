@@ -16,7 +16,7 @@ import { useTheme } from '../../context/ThemeContext'
 
 function Header() {
   const [showSidebar, setShowSidebar] = React.useState(false)
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
 
 
   return (
