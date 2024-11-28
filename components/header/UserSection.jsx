@@ -47,7 +47,7 @@ function UserSection({}) {
           <Dropdown.Item>Masum Billah</Dropdown.Item>
           <Dropdown.Divider />
           <Dropdown.Item>
-            <Link href={'/auth/login'} className={CLASSES.items_center}>
+            <Link href={'/auth'} className={CLASSES.items_center}>
               Logout
             </Link>
           </Dropdown.Item>

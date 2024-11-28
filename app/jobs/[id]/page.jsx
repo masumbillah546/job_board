@@ -67,7 +67,7 @@ export default function JobDetailPage() {
   return (
     <Container className="mt-4">
       <h1 className="mb-4">{job.title}</h1>
-      <h5 className="text-muted">{job.company}</h5>
+      <h5 className="text-secondary">{job.company}</h5>
       <p>
         <strong>Location:</strong> {job.location} | <strong>Salary:</strong>{" "}
         {job.salary} | <strong>Type:</strong> {job.jobType}
