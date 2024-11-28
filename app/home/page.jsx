@@ -1,14 +1,14 @@
 import React from 'react'
 import Container from 'react-bootstrap/Container'
 import SliderBanner from './components/SliderBanner'
-import { Puff, ThreeDots } from 'react-loader-spinner'
+// import { Puff, ThreeDots } from 'react-loader-spinner'
 //
 import Categories from './components/Categories'
 import SearchJob from './components/SearchJob'
 
 function Home() {
-  const [loading, setLoading] = React.useState(true)
-  const [homePageData, setHomePageData] = React.useState({})
+  // const [loading, setLoading] = React.useState(true)
+  // const [homePageData, setHomePageData] = React.useState({})
 
   React.useEffect(() => {
     getHomePageData()

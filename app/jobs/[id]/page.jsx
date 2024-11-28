@@ -2,7 +2,7 @@
 // pages/jobs/[id].js
 import React from "react";
 // import { useRouter } from "next/router";
-import { Container, Row, Col, Tab, Tabs } from "react-bootstrap";
+import { Container, Tab, Tabs } from "react-bootstrap";
 import dynamic from "next/dynamic";
 
 const ChatWidget = dynamic(() => import("../components/ChatWidget"), {
@@ -59,7 +59,7 @@ export default function JobDetailPage() {
     return (
       <Container className="mt-5 text-center">
         <h2>Job Not Found</h2>
-        <p>The job you're looking for does not exist.</p>
+        <p>{"The job you're looking for does not exist."}</p>
       </Container>
     );
   }

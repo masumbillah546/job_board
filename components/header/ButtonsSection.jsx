@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { CLASSES } from '../../assets/styles/styles'
-import { Button } from 'react-bootstrap'
 // import NotificationSmallView from '../../pages/main/notifications/components/NotificationSmallView'
 
 import { useTheme } from "../../context/ThemeContext";

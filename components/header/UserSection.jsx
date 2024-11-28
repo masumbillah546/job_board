@@ -3,7 +3,6 @@ import React from 'react'
 import Image from 'react-bootstrap/Image'
 import { CLASSES } from '../../assets/styles/styles'
 import { Dropdown } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
 
 function UserSection({}) {
   // React.useEffect(() => {

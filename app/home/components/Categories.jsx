@@ -61,7 +61,7 @@ function Categories({ data = jobCategories }) {
     <Container className='py-5'>
       <Row className={CLASSES.content_center + 'mb-5'}>
         <h3 className='text-center' style={{fontSize: 25}}>Job Categories</h3>
-        {data.map((category, i) => (
+        {data.map((category) => (
           <Col key={category.id} xl={3} lg={4}  sm={6} className='my-4'>
             <div className='position-relative mb-5'>
               <div

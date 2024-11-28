@@ -1,11 +1,11 @@
 "use client"
-import { useState } from 'react'
+// import { useState } from 'react'
 import Container from 'react-bootstrap/Container'
 import Carousel from 'react-bootstrap/Carousel'
 import Image from 'react-bootstrap/Image'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
+// import Button from 'react-bootstrap/Button'
 // import MainBanner from '../../../assets/images/home/banner.jpg'
 // import ControlLeftIcon from '../../../assets/icons/common/control-left-2.svg'
 // import ControlRightIcon from '../../../assets/icons/common/control-right-2.svg'
@@ -37,19 +37,19 @@ export const featuredJobs = [
 ];
 
 function SliderBanner({ data = featuredJobs }) {
-  const [index, setIndex] = useState(0)
+  // const [index, setIndex] = useState(0)
 
-  const handleSelect = (selectedIndex) => {
-    setIndex(selectedIndex)
-  }
+  // const handleSelect = (selectedIndex) => {
+  //   setIndex(selectedIndex)
+  // }
 
   return (
     <Carousel
       // activeIndex={index}
       hidden={false}
       indicators
-      onSlide={handleSelect}
-      onSelect={handleSelect}
+      // onSlide={handleSelect}
+      // onSelect={handleSelect}
       // prevIcon={
       //   <Image
       //     style={{

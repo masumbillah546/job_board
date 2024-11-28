@@ -55,7 +55,7 @@ export default function Dashboard() {
         setError("Failed to post the job. Try again.");
       }
     } catch (err) {
-      setError("An error occurred. Please try again.");
+      setError(err.message);
     }
   };
 
