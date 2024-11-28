@@ -1,0 +1,27 @@
+.search-container {
+  border: 1px solid rgba(200, 200, 200, 1);
+  border-radius: 38px;
+}
+.search-button {
+  border: 0;
+  background-color: white;
+  border-top-right-radius: 38px;
+  border-bottom-right-radius: 38px;
+}
+.search-input:focus {
+  box-shadow: none;
+}
+.dropdown-toggle {
+  border: 0px !important;
+  outline-color: white;
+  box-shadow: none;
+}
+.navbar-toggler {
+  display: block !important; /* Always show the toggle button */
+  border: none;
+  outline: none;
+  /* padding: 0.5rem; */
+  background-color: transparent;
+  color: white; /* Change this to the desired color */
+  cursor: pointer;
+}

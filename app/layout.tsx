@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import 'bootstrap/dist/css/bootstrap.min.css'
+import '../assets/styles/styles.scss'
 import "./globals.css";
+import Header from "../components/header";
+// import { store } from "../store";
+// import { Provider } from "react-redux";
+import { ThemeProvider } from "../context/ThemeContext";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,11 +32,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <ThemeProvider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+            <Header />
+            {children}
+        </body>
+      </ThemeProvider>
     </html>
   );
 }
