@@ -5,6 +5,7 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap'
 import JobFilter from './components/JobFilter'
 import Pagination from './components/Pagination'
 import FullPageLoader from '../../components/loader/FullPageLoader'
+import { useSearchParams } from 'next/navigation'
 
 export const encodeQuery = (data) => {
   let query = '?'
@@ -17,6 +18,9 @@ export const encodeQuery = (data) => {
 }
 
 export default function JobListPage() {
+  const searchParams = useSearchParams()
+  const category = searchParams.get('category');
+  const keyword = searchParams.get('keyword');
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPage, setTotalPage] = useState(0)
   const jobsPerPage = 5 // Number of jobs to show per page
@@ -53,15 +57,8 @@ export default function JobListPage() {
 
   useEffect(() => {
     getData({
-      category:
-        window.location.search &&
-        window.location.search.split('=')[0] != '?keyword' &&
-        window.location.search.split('=')[1],
-      keyword:
-        window.location.search &&
-        window.location.search.split('=')[0] == '?keyword' &&
-        window.location.search &&
-        window.location.search.split('=')[1],
+      category: category,
+      keyword: keyword,
       jobsPerPage,
       currentPage,
       ...searchQuery,

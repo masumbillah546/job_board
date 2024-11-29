@@ -1,8 +1,11 @@
 // pages/jobs/index.js
+import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Container, Row, Col, Form } from 'react-bootstrap'
 
 export default function JobFilter({ jobs, handleFilter = () => {} }) {
+  const searchParams = useSearchParams()
+  const category = searchParams.get('category')
   const [jobCategories, setCategories] = useState([])
   const [jobTypes] = useState(['All', 'Full-Time', 'Freelance', 'Part-Time'])
   const [locations] = useState([
@@ -65,12 +68,10 @@ export default function JobFilter({ jobs, handleFilter = () => {} }) {
               })
             }}
           >
-            {window.location.search && window.location.search.split('=')[0] != "?keyword" && (
+            {category && (
               <option>
                 {jobCategories.length > 0 &&
-                  jobCategories.find(
-                    (c) => c.id == window.location.search.split('=')[1],
-                  ).name}
+                  jobCategories.find((c) => c.id == category).name}
               </option>
             )}
             {jobCategories.map((category) => (
