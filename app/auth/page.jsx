@@ -30,7 +30,7 @@ export default function AuthPage() {
           <p style={{ marginTop: '20px' }}>
             {isLogin ? (
               <>
-                Don't have an account?{' '}
+                {"Don't have an account?"}{' '}
                 <button
                   style={{
                     border: 'none',
