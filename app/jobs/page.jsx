@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, Suspense } from 'react'
 import { Container, Row, Col, Card, Button } from 'react-bootstrap'
 import JobFilter from './components/JobFilter'
 import Pagination from './components/Pagination'
@@ -72,6 +72,8 @@ export default function JobListPage() {
   }
 
   return (
+    <Suspense fallback={<p>Loading...</p>}>
+
     <div className='position-relative'>
       <Container
         className='mt-4'
@@ -131,5 +133,6 @@ export default function JobListPage() {
       </Container>
       {loading && <FullPageLoader loading={loading} />}
     </div>
+    </Suspense>
   )
 }
