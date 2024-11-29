@@ -59,6 +59,7 @@ function Header() {
                   style={{
                     color: theme === 'light' ? COLORS.black : COLORS.white,
                   }}
+                  className='border rounded p-2 px-3'
                 >
                   Jobs
                 </span>

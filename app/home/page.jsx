@@ -7,24 +7,6 @@ import Categories from './components/Categories'
 import SearchJob from './components/SearchJob'
 
 function Home() {
-  // const [loading, setLoading] = React.useState(true)
-  // const [homePageData, setHomePageData] = React.useState({})
-
-  React.useEffect(() => {
-    getHomePageData()
-  }, [])
-  const getHomePageData = async () => {
-    setLoading(true)
-    try {
-      // const response = await HomePageService.getHomePageData()
-      // setHomePageData(response)
-      // console.log(response)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   return (
     <>

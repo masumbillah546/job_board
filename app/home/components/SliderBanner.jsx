@@ -1,4 +1,5 @@
 'use client'
+import { useCallback, useEffect, useState } from 'react'
 import Container from 'react-bootstrap/Container'
 import Carousel from 'react-bootstrap/Carousel'
 import Row from 'react-bootstrap/Row'
@@ -6,53 +7,56 @@ import Col from 'react-bootstrap/Col'
 import { CLASSES } from '../../../assets/styles/styles'
 import { useTheme } from '../../../context/ThemeContext'
 
-export const featuredJobs = [
-  {
-    id: 1,
-    title: 'Software Engineer',
-    company: 'TechCorp',
-    location: 'Remote',
-    image: 'https://via.placeholder.com/600x200',
-  },
-  {
-    id: 2,
-    title: 'Product Manager',
-    company: 'Innovate Inc.',
-    location: 'San Francisco, CA',
-    image: 'https://via.placeholder.com/600x200',
-  },
-  {
-    id: 3,
-    title: 'UI/UX Designer',
-    company: 'Designify',
-    location: 'New York, NY',
-    image: 'https://via.placeholder.com/600x200',
-  },
-]
-
-function SliderBanner({ data = featuredJobs }) {
+function SliderBanner() {
   const { theme } = useTheme()
+
+  const [loading, setLoading] = useState(true)
+  const [jobPosts, setJobPosts] = useState([])
+
+  const getData = useCallback(async () => {
+    setLoading(true)
+    try {
+      const res = await fetch(
+        process.env.NEXT_PUBLIC_APP_API_ENDPOINT + '/api/jobs?featured=1',
+      ) // Replace with your API URL
+      const data = await res.json()
+      if (data) {
+        setJobPosts(data.currentJobs)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    getData()
+  }, [])
   return (
     <Carousel hidden={false} indicators>
-      {data.map((banner) => (
+      {jobPosts.map((job) => (
         <Carousel.Item
-          key={banner.id}
-          className={`position-relative bg-${theme}`}
+          key={job.id}
+          className={`position-relative`}
+          style={{backgroundColor:'gray' }}
         >
           <div
             className={CLASSES.content_center}
             style={{
               top: 0,
               zIndex: 1,
-              aspectRatio: 16 / 7,
+              aspectRatio: 16 / 6,
               width: '100%',
             }}
           >
             <Container>
-              <Row>
-                <Col md={10} className='p-4 px-5 text-center'>
-                  <h1>{banner.title}</h1>
-                  <p>{banner.company}</p>
+              <Row className='justify-content-center'>
+                <Col md={10} className='p-4 px-5 '>
+                  <h2>{job.title}</h2>
+                  <h4>{job.company}</h4>
+                  <h5>{job.location}</h5>
+                  <p>{job.description}</p>
                 </Col>
               </Row>
             </Container>

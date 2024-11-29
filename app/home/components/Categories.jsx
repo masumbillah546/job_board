@@ -1,69 +1,51 @@
+import { useCallback, useEffect, useState } from 'react'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import { CLASSES } from '../../../assets/styles/styles'
 import { Card, CardBody, Image } from 'react-bootstrap'
+import Link from 'next/link'
 // import Image from "next/image";
 
-export const jobCategories = [
-  {
-    id: 1,
-    name: "Software Development",
-    description: "Jobs for developers, engineers, and programmers.",
-    image: "https://via.placeholder.com/150?text=Software+Dev", // Dummy image
-  },
-  {
-    id: 2,
-    name: "Design & Creative",
-    description: "UI/UX designers, graphic artists, and creative roles.",
-    image: "https://via.placeholder.com/150?text=Design+Creative",
-  },
-  {
-    id: 3,
-    name: "Marketing",
-    description: "Marketing specialists, SEO experts, and strategists.",
-    image: "https://via.placeholder.com/150?text=Marketing",
-  },
-  {
-    id: 4,
-    name: "Project Management",
-    description: "Project managers, scrum masters, and coordinators.",
-    image: "https://via.placeholder.com/150?text=Project+Management",
-  },
-  {
-    id: 5,
-    name: "Customer Support",
-    description: "Customer service reps, support specialists, and help desk roles.",
-    image: "https://via.placeholder.com/150?text=Customer+Support",
-  },
-  {
-    id: 6,
-    name: "Sales",
-    description: "Sales representatives, account executives, and business developers.",
-    image: "https://via.placeholder.com/150?text=Sales",
-  },
-  {
-    id: 7,
-    name: "Finance & Accounting",
-    description: "Accountants, financial analysts, and tax professionals.",
-    image: "https://via.placeholder.com/150?text=Finance+Accounting",
-  },
-  {
-    id: 8,
-    name: "Healthcare",
-    description: "Nurses, doctors, and healthcare specialists.",
-    image: "https://via.placeholder.com/150?text=Healthcare",
-  },
-];
+function Categories() {
+  const [loading, setLoading] = useState(true)
+  const [listType, setListType] = useState(1)
+  const [categories, setCategories] = useState([])
 
-function Categories({ data = jobCategories }) {
+  const getData = useCallback(async () => {
+    setLoading(true)
+    try {
+      const res = await fetch(
+        process.env.NEXT_PUBLIC_APP_API_ENDPOINT + '/api/categories',
+      )
+      const data = await res.json()
+      if (data) {
+        setCategories(data)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    getData()
+  }, [getData, listType])
+
   return (
     <Container className='py-5'>
       <Row className={CLASSES.content_center + 'mb-5'}>
-        <h3 className='text-center' style={{fontSize: 25}}>Job Categories</h3>
-        {data.map((category) => (
-          <Col key={category.id} xl={3} lg={4}  sm={6} className='my-4'>
-            <div className='position-relative mb-5'>
+        <h3 className='text-center' style={{ fontSize: 25 }}>
+          Job Categories
+        </h3>
+        {categories.map((category) => (
+          <Col key={category.id} xl={3} lg={4} sm={6} className='my-5'>
+            <Link
+              key={category}
+              href={`/jobs?category=${category.id}`}
+              className='position-relative mb-5'
+            >
               <div
                 style={{
                   aspectRatio: 1 / 1,
@@ -75,17 +57,7 @@ function Categories({ data = jobCategories }) {
                   height={'100%'}
                   src={'https://via.placeholder.com/300'}
                   className='pointer'
-                  // onClick={() => setActive((x) => !x)}
                 />
-                  {/* <Image
-                    src={'https://via.placeholder.com/300'} // Use a placeholder if no image exists
-                    alt={'job.title'}
-                    width={300}
-                    height={300}
-                    layout="responsive"
-                    placeholder="blur" // Optional: Use a blurred placeholder
-                    blurDataURL="https://via.placeholder.com/300" // Path to placeholder image
-                  /> */}
               </div>
               <div
                 style={{
@@ -108,7 +80,7 @@ function Categories({ data = jobCategories }) {
                   </CardBody>
                 </Card>
               </div>
-            </div>
+            </Link>
           </Col>
         ))}
       </Row>

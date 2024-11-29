@@ -1,7 +1,6 @@
 'use client'
-// pages/jobs/[id].js
-import React from "react";
-// import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Container, Tab, Tabs } from "react-bootstrap";
 import dynamic from "next/dynamic";
 
@@ -10,58 +9,34 @@ const ChatWidget = dynamic(() => import("../components/ChatWidget"), {
   loading: () => <p>Loading Chat...</p>,
 });
 
-// data/jobs.js
-export const jobs = [
-  {
-    id: 1,
-    title: "Software Engineer",
-    company: "TechCorp",
-    location: "Remote",
-    salary: "$120,000 - $140,000",
-    jobType: "Full-Time",
-    experienceLevel: "Mid-Level",
-    description: "Build and maintain scalable web applications.",
-    requirements: [
-      "3+ years of experience in software development.",
-      "Proficiency in JavaScript and React.",
-    ],
-    companyInfo: "TechCorp is a leading tech company specializing in innovative solutions.",
-  },
-  {
-    id: 2,
-    title: "Product Manager",
-    company: "Innovate Inc.",
-    location: "San Francisco, CA",
-    salary: "$110,000 - $130,000",
-    jobType: "Full-Time",
-    experienceLevel: "Senior-Level",
-    description: "Lead the product team to deliver high-quality solutions.",
-    requirements: [
-      "5+ years of experience in product management.",
-      "Strong communication and leadership skills.",
-    ],
-    companyInfo: "Innovate Inc. is dedicated to driving innovation across industries.",
-  },
-  // Add more jobs...
-];
+export default function JobDetailPage({params}) {
+  const router = useRouter();
+  const [job, setJob] = useState(null);
+  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    const fetchJob = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_API_ENDPOINT}/api/jobs/${params?.id}`);
+        if (!response.ok) {
+          throw new Error('Job not found');
+        }
+        const data = await response.json();
+        setJob(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
 
-export default function JobDetailPage() {
-  // const router = useRouter();
-  // const { id } = router.query;
-  const { id } = { id: 1 };
+    fetchJob();
+  }, [params?.id]);
 
-  // Find the job by ID
-  const job = jobs.find((job) => job.id === parseInt(id));
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
-  // Handle job not found
   if (!job) {
-    return (
-      <Container className="mt-5 text-center">
-        <h2>Job Not Found</h2>
-        <p>{"The job you're looking for does not exist."}</p>
-      </Container>
-    );
+    return <div>Loading...</div>;
   }
 
   return (
