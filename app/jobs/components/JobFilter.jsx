@@ -1,6 +1,6 @@
 // pages/jobs/index.js
 import { useSearchParams } from 'next/navigation'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { Suspense, useCallback, useEffect, useState } from 'react'
 import { Container, Row, Col, Form } from 'react-bootstrap'
 
 export default function JobFilter({ jobs, handleFilter = () => {} }) {
@@ -40,6 +40,7 @@ export default function JobFilter({ jobs, handleFilter = () => {} }) {
   }, [])
 
   return (
+    <Suspense fallback={<p>Loading...</p>}>
     <Container className='my-4'>
       {/* Filter Controls */}
       <Row className='mb-4'>
@@ -99,5 +100,6 @@ export default function JobFilter({ jobs, handleFilter = () => {} }) {
         </Col>
       </Row>
     </Container>
+    </Suspense>
   )
 }
