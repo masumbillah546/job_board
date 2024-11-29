@@ -24,9 +24,14 @@ export default function JobListPage() {
   const [jobPosts, setJobPosts] = useState([])
   const [searchQuery, setSearchQuery] = useState({})
 
-  const [user] = useState(
-    JSON.parse(localStorage.getItem('loggedInUser')) || {},
-  )
+  const [user, setUser] = useState({})
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const data = JSON.parse(localStorage.getItem('loggedInUser'))
+      setUser(data || {})
+    }
+  }, [window])
 
   const getData = useCallback(async (query) => {
     setLoading(true)

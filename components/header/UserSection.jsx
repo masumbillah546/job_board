@@ -11,7 +11,14 @@ function UserSection({}) {
   const { theme } = useTheme()
   const router = useRouter()
   const color = theme == 'dark' ? 'white' : 'black'
-  const [ user, setUser ] = useState(JSON.parse(localStorage.getItem('loggedInUser')) || {})
+  const [ user, setUser ] = useState({})
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const data = JSON.parse(localStorage.getItem('loggedInUser'))
+      setUser(data || {})
+    }
+  }, [window])
 
   const handleLogin = () => {
     router.push('/auth')
