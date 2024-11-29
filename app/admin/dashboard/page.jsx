@@ -10,10 +10,8 @@ export default function Dashboard() {
   const [user, setUser] = useState({})
 
   React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const data = JSON.parse(localStorage.getItem('loggedInUser'))
-      setUser(data || {})
-    }
+    const data = JSON.parse(localStorage.getItem('loggedInUser'))
+    setUser(data || {})
   }, [])
 
   useEffect(() => {
