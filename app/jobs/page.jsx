@@ -31,7 +31,7 @@ export default function JobListPage() {
       const data = JSON.parse(localStorage.getItem('loggedInUser'))
       setUser(data || {})
     }
-  }, [window])
+  }, [])
 
   const getData = useCallback(async (query) => {
     setLoading(true)

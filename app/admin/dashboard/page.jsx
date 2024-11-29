@@ -14,7 +14,7 @@ export default function Dashboard() {
       const data = JSON.parse(localStorage.getItem('loggedInUser'))
       setUser(data || {})
     }
-  }, [window])
+  }, [])
 
   useEffect(() => {
     if (!user?.email || user?.role != 'Admin') {

@@ -18,7 +18,7 @@ function UserSection({}) {
       const data = JSON.parse(localStorage.getItem('loggedInUser'))
       setUser(data || {})
     }
-  }, [window])
+  }, [])
 
   const handleLogin = () => {
     router.push('/auth')
