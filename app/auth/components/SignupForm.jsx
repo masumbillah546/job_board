@@ -7,25 +7,54 @@ import { useTheme } from '../../../context/ThemeContext'
 export default function SignupForm({ onSignupSuccess }) {
   const { theme } = useTheme()
   const [email, setEmail] = useState('')
+  const [role, setRole] = useState('Admin')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
 
-  const handleSignup = (e) => {
-    e.preventDefault()
-
-    // Check if user already exists in localStorage
-    const users = JSON.parse(localStorage.getItem('users')) || []
-    const userExists = users.find((user) => user.email === email)
-
-    if (userExists) {
-      setError('User already exists. Please login.')
-      return
+  // Validate form
+  const validateForm = () => {
+    console.log(role)
+    if (!email || !password || !role) {
+      setError('All fields are required.')
+      return false
     }
+    setError('')
+    return true
+  }
 
-    // Add new user to localStorage
-    users.push({ email, password })
-    localStorage.setItem('users', JSON.stringify(users))
-    onSignupSuccess() // Notify parent to switch to login
+  // Submit form
+  const handleSignup = async (e) => {
+    e.preventDefault()
+    if (!validateForm()) return
+
+    try {
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_APP_API_ENDPOINT + '/api/auth',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password, role, type: 'registration' }),
+        },
+      )
+      const result = await response.json()
+      if (result.success && !result.isExist) {
+        // localStorage.setItem(
+        //   'loggedInUser',
+        //   JSON.stringify({ email, password, role }),
+        // )
+        onSignupSuccess() // Notify parent to navigate home
+      } else if (result.success && result.isExist) {
+        setError('User already exist.')
+        return
+      } else {
+        setError('Invalid email or password.')
+        return
+      }
+    } catch (err) {
+      setError(err.message)
+    }
   }
 
   return (
@@ -40,6 +69,22 @@ export default function SignupForm({ onSignupSuccess }) {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+      </Form.Group>
+      <Form.Group className='mb-3'>
+        <Form.Label>User role</Form.Label>
+        <Form.Select
+          style={{ borderColor: 'black' }}
+          defaultValue={'Admin'}
+          onChange={(e) => {
+            setRole(e.target.value)
+          }}
+        >
+          {['Admin', 'Candidate', 'Recruiter'].map((jobType) => (
+            <option key={jobType} value={jobType}>
+              {jobType}
+            </option>
+          ))}
+        </Form.Select>
       </Form.Group>
       <Form.Group className='mb-3'>
         <Form.Label>Password</Form.Label>

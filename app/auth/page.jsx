@@ -8,14 +8,13 @@ export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)
 
   const handleSignupSuccess = () => {
-    alert('Signup successful! Please log in.')
+    // alert('Signup successful! Please log in.')
     setIsLogin(true)
   }
 
-  const handleLoginSuccess = () => {
-    alert('Login successful!')
-    // Redirect to home or dashboard
+  const handleLoginSuccess = (type = 'login') => {
     window.location.href = '/'
+    // Redirect to home or dashboard
   }
 
   return (

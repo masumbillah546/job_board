@@ -10,23 +10,47 @@ export default function LoginForm({ onLoginSuccess }) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
 
-  const handleLogin = (e) => {
-    e.preventDefault()
-
-    // Check if user exists and password matches
-    const users = JSON.parse(localStorage.getItem('users')) || []
-    const user = users.find(
-      (user) => user.email === email && user.password === password,
-    )
-
-    if (!user) {
-      setError('Invalid email or password.')
-      return
+  // Validate form
+  const validateForm = () => {
+    if (!email || !password) {
+      setError('All fields are required.')
+      return false
     }
+    setError('')
+    return true
+  }
 
-    // Simulate user login
-    localStorage.setItem('loggedInUser', JSON.stringify(user))
-    onLoginSuccess() // Notify parent to navigate home
+  // Submit form
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    if (!validateForm()) return
+
+    try {
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_APP_API_ENDPOINT + '/api/auth',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password, type: 'login' }),
+        },
+      )
+      const result = await response.json()
+      if (result.success && !result.isExist) {
+        // Simulate user login
+        localStorage.setItem(
+          'loggedInUser',
+          JSON.stringify({ email, password, role: result.user.role }),
+        )
+        onLoginSuccess() // Notify parent to navigate home
+      } else {
+        setError('Invalid email or password.')
+        return
+      }
+    } catch (err) {
+      setError(err.message)
+    }
   }
 
   return (

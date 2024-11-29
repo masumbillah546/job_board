@@ -18,5 +18,5 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: ['/add-post', '/admin/dashboard'], // Apply middleware only to this route
+  matcher: [], // Apply middleware only to this route
 };

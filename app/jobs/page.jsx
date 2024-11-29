@@ -24,6 +24,10 @@ export default function JobListPage() {
   const [jobPosts, setJobPosts] = useState([])
   const [searchQuery, setSearchQuery] = useState({})
 
+  const [user] = useState(
+    JSON.parse(localStorage.getItem('loggedInUser')) || {},
+  )
+
   const getData = useCallback(async (query) => {
     setLoading(true)
     const _encodeQuery = encodeQuery(query)
@@ -76,11 +80,13 @@ export default function JobListPage() {
           opacity: loading ? 0.5 : 1,
         }}
       >
-        <Link href='/jobs/post-job' passHref>
-          <Button variant='success' className='mb-4'>
-            Post a Job
-          </Button>
-        </Link>
+        {(user?.role == 'Recruiter' || user?.role == 'Admin') && (
+          <Link href='/jobs/post-job' passHref>
+            <Button variant='success' className='mb-4'>
+              Post a Job
+            </Button>
+          </Link>
+        )}
 
         <h1 className='text-center mb-4'>Job Listings</h1>
 

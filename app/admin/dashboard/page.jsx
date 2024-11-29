@@ -1,14 +1,22 @@
 'use client'
-import React, { useState } from 'react'
-// import { useRouter } from "next/router";
+import React, { useEffect, useState } from 'react'
 import { Container, Table } from 'react-bootstrap'
 import NewPostForm from '../components/NewPostForm'
 import PostList from '../components/PostList'
+import { useRouter } from 'next/navigation'
 
 export default function Dashboard() {
-  // const router = useRouter();
-  const [showModal, setShowModal] = useState(false)
-  
+  const router = useRouter()
+  const [user] = useState(
+    JSON.parse(localStorage.getItem('loggedInUser')) || {},
+  )
+
+  useEffect(() => {
+    if (!user?.email || user?.role != 'Admin') {
+      router.push('/auth')
+    }
+  }, [])
+
   // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -38,9 +46,13 @@ export default function Dashboard() {
   }
 
   return (
-    <Container className='my-4'>
-      <NewPostForm />
-      <PostList />
-    </Container>
+    <>
+      {user.email ? (
+        <Container className='my-4'>
+          <NewPostForm />
+          <PostList />
+        </Container>
+      ) : null}
+    </>
   )
 }
