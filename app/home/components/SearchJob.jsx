@@ -30,8 +30,8 @@ function SearchJob() {
             <Form>
               <InputGroup style={{ height: 50 }} className='mb-3'>
                 <Form.Control
-                  placeholder="Recipient's username"
-                  aria-label="Recipient's username"
+                  placeholder="Type keywords"
+                  aria-label="Type keywords"
                   aria-describedby='basic-addon2'
                   onChange={(e) => setKeywords(e.target.value)}
                 />
