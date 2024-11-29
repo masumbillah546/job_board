@@ -17,7 +17,7 @@ export const encodeQuery = (data) => {
   return query.slice(0, -1)
 }
 
-export default function JobListPage() {
+function QueryParamsComponent() {
   const searchParams = useSearchParams()
   const category = searchParams.get('category');
   const keyword = searchParams.get('keyword');
@@ -135,4 +135,13 @@ export default function JobListPage() {
     </div>
     </Suspense>
   )
+}
+
+
+export default function JobListPage() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <QueryParamsComponent />
+    </Suspense>
+  );
 }

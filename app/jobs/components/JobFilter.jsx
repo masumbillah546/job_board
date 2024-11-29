@@ -3,7 +3,7 @@ import { useSearchParams } from 'next/navigation'
 import React, { Suspense, useCallback, useEffect, useState } from 'react'
 import { Container, Row, Col, Form } from 'react-bootstrap'
 
-export default function JobFilter({ jobs, handleFilter = () => {} }) {
+function QueryParamsComponent({ jobs, handleFilter = () => {} }) {
   const searchParams = useSearchParams()
   const category = searchParams.get('category')
   const [jobCategories, setCategories] = useState([])
@@ -102,4 +102,13 @@ export default function JobFilter({ jobs, handleFilter = () => {} }) {
     </Container>
     </Suspense>
   )
+}
+
+
+export default function JobFilter({handleFilter = () => {}}) {
+ return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <QueryParamsComponent handleFilter={handleFilter} />
+    </Suspense>
+  );
 }
