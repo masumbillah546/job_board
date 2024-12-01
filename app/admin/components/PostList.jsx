@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { encodeQuery } from '../../jobs/page'
 import Pagination from '../../jobs/components/Pagination'
 
-function PostList() {
+function PostList({setData = () => {}}) {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPage, setTotalPage] = useState(0)
   const jobsPerPage = 5 // Number of jobs to show per page
@@ -40,6 +40,28 @@ function PostList() {
     })
   }, [getData, searchQuery, jobsPerPage, currentPage])
 
+  const handleDelete = async (id) => {
+    try {
+      const res = await fetch(
+        process.env.NEXT_PUBLIC_APP_API_ENDPOINT + `/api/jobs?id=${id}`, {
+          method: 'DELETE',
+        }
+      )
+      console.log(res)
+      if (res.ok) {
+        setJobPosts(jobPosts.filter((job) => job.id !== id))
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleEdit = (id) => {
+
+  }
+
   return (
     <Container>
       <Table striped bordered hover className='mt-4'>
@@ -62,8 +84,8 @@ function PostList() {
               <td>{job.company}</td>
               <td>{job.salary}</td>
               <td className={CLASSES.content_center + ' gap-2'}>
-                <Button variant='info'>Edit</Button>
-                <Button variant='danger'>Delete</Button>
+                <Button onClick={() => setData(job)} variant='info'>Edit</Button>
+                <Button onClick={() => handleDelete(job.id)} variant='danger'>Delete</Button>
               </td>
             </tr>
           ))}

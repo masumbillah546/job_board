@@ -28,14 +28,21 @@ export async function POST(request) {
   const isAuthenticate = users.find(
     (user) => user.email == email && password == user.password,
   )
-  if (isAuthenticate) {
+  if (isAuthenticate && type == 'registration') {
     return NextResponse.json({
       success: true,
-      isExist: type != 'login',
-      message: type != 'login' ? 'Already registered' : 'Login successful..',
+      isExist: true,
+      message: 'Already registered',
       user: isAuthenticate,
     })
-  } else {
+  } else  if (isAuthenticate && type == 'login') {
+    return NextResponse.json({
+      success: true,
+      isExist: false,
+      message: 'Login successful..',
+      user: isAuthenticate,
+    })
+  } else if (!isAuthenticate && type == 'registration') {
     const newUser = {
       id: users.length + 1,
       ...body,
@@ -45,6 +52,11 @@ export async function POST(request) {
       success: true,
       message: 'Account created successfully',
       user: newUser,
+    })
+  } else {
+    return NextResponse.json({
+      success: false,
+      message: 'Invalid email or password',
     })
   }
 }

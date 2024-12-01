@@ -31,7 +31,7 @@ function UserSection({}) {
     <div>
       <Dropdown>
         {!user?.email ? (
-          <div onClick={handleLogin}>
+          <div onClick={handleLogin} className='pointer'>
             <svg
               width='24'
               height='24'

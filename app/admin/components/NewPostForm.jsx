@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 // import { useRouter } from "next/router";
 import { Container, Form, Button, Alert, Modal } from 'react-bootstrap'
 
-export default function NewPostForm() {
+export default function NewPostForm({ job, setJob = () => {}}) {
   // const router = useRouter();
   const [showModal, setShowModal] = useState(false)
  // const router = useRouter();
@@ -45,6 +45,16 @@ const getData = useCallback(async () => {
 useEffect(() => {
   getData()
 }, [getData, listType])
+
+useEffect(() => {
+  if (job?.id) {
+    setFormData(job)
+    setShowModal(true)
+  } else {
+    setShowModal(false)
+    setFormData({ title: '', description: '', salary: '', location: '', company: '', jobType: '', category: '' })
+  }
+}, [job?.id])
 
 // Handle input changes
 const handleChange = (e) => {
@@ -98,10 +108,16 @@ const handleSubmit = async (e) => {
       <div>
         <Button onClick={() => setShowModal(true)}>Add New Post</Button>
       </div>
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal show={showModal} onHide={() => {
+        setShowModal(false)
+        if (job?.id) {
+          setFormData({ title: '', description: '', salary: '', location: '', company: '', jobType: '', category: '' })
+          setJob({})
+        }
+      }}>
         <Modal.Body>
           <Modal.Header closeButton className='mb-3'>
-            <Modal.Title>Post a Job</Modal.Title>
+            <Modal.Title>{job?.id ? 'Edit Job' : 'Post a Job'}</Modal.Title>
           </Modal.Header>
           {error && <Alert variant='danger'>{error}</Alert>}
           {success && <Alert variant='success'>Job posted successfully!</Alert>}

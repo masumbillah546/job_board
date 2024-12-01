@@ -315,7 +315,7 @@ export async function PUT(request) {
   const body = await request.json();
   const { id, ...updates } = body;
 
-  const jobIndex = jobs.findIndex((job) => job.id === id);
+  const jobIndex = jobs.findIndex((job) => job.id == id);
   if (jobIndex === -1) {
     return NextResponse.json({ message: 'Job not found' }, { status: 404 });
   }
@@ -332,7 +332,7 @@ export async function DELETE(request) {
   const { searchParams } = new URL(request.url);
   const id = parseInt(searchParams.get('id'), 10);
 
-  const jobIndex = jobs.findIndex((job) => job.id === id);
+  const jobIndex = jobs.findIndex((job) => job.id == id);
   if (jobIndex === -1) {
     return NextResponse.json({ message: 'Job not found' }, { status: 404 });
   }
