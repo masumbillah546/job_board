@@ -1,11 +1,12 @@
-import { Button, Container } from 'react-bootstrap'
+import { Alert, Button, Container } from 'react-bootstrap'
 import Table from 'react-bootstrap/Table'
 import { CLASSES } from '../../../assets/styles/styles'
 import { useCallback, useEffect, useState } from 'react'
 import { encodeQuery } from '../../jobs/page'
 import Pagination from '../../jobs/components/Pagination'
 
-function PostList({setData = () => {}}) {
+function PostList({ setData = () => {} }) {
+  const [success, setSuccess] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPage, setTotalPage] = useState(0)
   const jobsPerPage = 5 // Number of jobs to show per page
@@ -43,13 +44,21 @@ function PostList({setData = () => {}}) {
   const handleDelete = async (id) => {
     try {
       const res = await fetch(
-        process.env.NEXT_PUBLIC_APP_API_ENDPOINT + `/api/jobs?id=${id}`, {
+        process.env.NEXT_PUBLIC_APP_API_ENDPOINT + `/api/jobs?id=${id}`,
+        {
           method: 'DELETE',
-        }
+        },
       )
-      console.log(res)
       if (res.ok) {
-        setJobPosts(jobPosts.filter((job) => job.id !== id))
+        getData({
+          jobsPerPage,
+          currentPage,
+          ...searchQuery,
+        })
+        setSuccess(true)
+        setTimeout(() => {
+          setSuccess(false)
+        }, 2000)
       }
     } catch (error) {
       console.log(error)
@@ -58,13 +67,14 @@ function PostList({setData = () => {}}) {
     }
   }
 
-  const handleEdit = (id) => {
-
-  }
-
   return (
     <Container>
-      <Table striped bordered hover className='mt-4'>
+      {success && (
+        <div className='my-2'>
+          <Alert variant='success'>Job deleted successfully!</Alert>
+        </div>
+      )}
+      <Table striped responsive bordered hover className='mt-2'>
         <thead>
           <tr>
             <th>#Id</th>
@@ -84,8 +94,12 @@ function PostList({setData = () => {}}) {
               <td>{job.company}</td>
               <td>{job.salary}</td>
               <td className={CLASSES.content_center + ' gap-2'}>
-                <Button onClick={() => setData(job)} variant='info'>Edit</Button>
-                <Button onClick={() => handleDelete(job.id)} variant='danger'>Delete</Button>
+                <Button onClick={() => setData(job)} variant='info'>
+                  Edit
+                </Button>
+                <Button onClick={() => handleDelete(job.id)} variant='danger'>
+                  Delete
+                </Button>
               </td>
             </tr>
           ))}

@@ -1,13 +1,9 @@
 'use client'
 import React, { useState, useCallback, useEffect } from 'react'
-// import { useRouter } from "next/router";
 import { Container, Form, Button, Alert, Modal } from 'react-bootstrap'
+import { CLASSES } from '../../../assets/styles/styles'
 
-export default function NewPostForm({ job, setJob = () => {}}) {
-  // const router = useRouter();
-  const [showModal, setShowModal] = useState(false)
- // const router = useRouter();
- const [formData, setFormData] = useState({
+const defaultFormData = {
   title: '',
   description: '',
   salary: '',
@@ -15,112 +11,126 @@ export default function NewPostForm({ job, setJob = () => {}}) {
   company: '',
   jobType: '',
   category: '',
-})
-const [error, setError] = useState('')
-const [success, setSuccess] = useState(false)
+}
+export default function NewPostForm({ job, setJob = () => {} }) {
+  const [showModal, setShowModal] = useState(false)
+  const [formData, setFormData] = useState(defaultFormData)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [categories, setCategories] = useState([])
+  const [jobTypes] = useState(['All', 'Full-Time', 'Freelance', 'Part-Time'])
 
-const [loading, setLoading] = useState(true)
-const [listType, setListType] = useState(1)
-const [categories, setCategories] = useState([])
-const [jobTypes] = useState(['All', 'Full-Time', 'Freelance', 'Part-Time'])
-
-const getData = useCallback(async () => {
-  setLoading(true)
-  try {
-    const res = await fetch(
-      process.env.NEXT_PUBLIC_APP_API_ENDPOINT + '/api/categories',
-    )
-    const data = await res.json()
-    if (data) {
-      setCategories(data)
+  const getData = useCallback(async () => {
+    setLoading(true)
+    try {
+      const res = await fetch(
+        process.env.NEXT_PUBLIC_APP_API_ENDPOINT + '/api/categories',
+      )
+      const data = await res.json()
+      if (data) {
+        setCategories(data)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
-  } catch (error) {
-    console.log(error)
-  } finally {
-    setLoading(false)
-    setShowModal(false)
-  }
-}, [])
+  }, [])
 
-useEffect(() => {
-  getData()
-}, [getData, listType])
+  useEffect(() => {
+    getData()
+  }, [getData])
 
-useEffect(() => {
-  if (job?.id) {
-    setFormData(job)
-    setShowModal(true)
-  } else {
-    setShowModal(false)
-    setFormData({ title: '', description: '', salary: '', location: '', company: '', jobType: '', category: '' })
-  }
-}, [job?.id])
-
-// Handle input changes
-const handleChange = (e) => {
-  const { name, value } = e.target
-  setFormData((prev) => ({ ...prev, [name]: value }))
-}
-
-// Validate form
-const validateForm = () => {
-  const { title, description, location, category } = formData
-  if (!title || !description || !location || !category) {
-    setError('All fields are required.')
-    return false
-  }
-  setError('')
-  return true
-}
-
-// Submit form
-const handleSubmit = async (e) => {
-  e.preventDefault()
-  if (!validateForm()) return
-
-  try {
-    const response = await fetch(
-      process.env.NEXT_PUBLIC_APP_API_ENDPOINT + '/api/jobs',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...formData, id: Date.now() }),
-      },
-    )
-    if (response.ok) {
-      setSuccess(true)
-      setFormData({ title: '', description: '', location: '', category: '' })
-      setTimeout(() => {
-        // router.push("/jobs");
-      }, 2000) // Redirect to Job Listings page after 2 seconds
+  useEffect(() => {
+    console.log(job)
+    if (job?.id) {
+      setFormData(job)
+      setShowModal(true)
     } else {
-      setError('Failed to post the job. Try again.')
+      formModalClose()
     }
-  } catch (err) {
-    setError(err.message)
+  }, [job?.id])
+
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
-}
+
+  // Validate form
+  const validateForm = () => {
+    const { title, description, location, category } = formData
+    if (!title || !description || !location || !category) {
+      setError('All fields are required.')
+      return false
+    }
+    setError('')
+    return true
+  }
+
+  const formModalClose = () => {
+    setShowModal(false)
+    setFormData(defaultFormData)
+    if (job?.id) {
+      setFormData(defaultFormData)
+      // setJob({})
+    }
+  }
+
+  // Submit form
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!validateForm()) return
+
+    try {
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_APP_API_ENDPOINT + '/api/jobs',
+        {
+          method: job?.id ? 'PUT' : 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ...formData, id: job?.id || Date.now() }),
+        },
+      )
+      if (response.ok) {
+        formModalClose()
+        setSuccess(true)
+        setTimeout(() => {
+          setSuccess(false)
+        }, 2000)
+      } else {
+        setError('Failed to post the job. Try again.')
+      }
+    } catch (err) {
+      setError(err.message)
+    }
+  }
 
   return (
     <div>
-      <div>
-        <Button onClick={() => setShowModal(true)}>Add New Post</Button>
+      <div className={CLASSES.content_between + ' gap-3'}>
+        <Button
+          onClick={() => {
+            setShowModal(true)
+            setJob({})
+          }}
+        >
+          Add New Post
+        </Button>
+        {success && (
+          <Alert variant='success'>
+            Job {job?.id ? 'Updated' : 'posted'} successfully!
+          </Alert>
+        )}
       </div>
-      <Modal show={showModal} onHide={() => {
-        setShowModal(false)
-        if (job?.id) {
-          setFormData({ title: '', description: '', salary: '', location: '', company: '', jobType: '', category: '' })
-          setJob({})
-        }
-      }}>
+      <Modal show={showModal} onHide={formModalClose}>
         <Modal.Body>
           <Modal.Header closeButton className='mb-3'>
             <Modal.Title>{job?.id ? 'Edit Job' : 'Post a Job'}</Modal.Title>
           </Modal.Header>
           {error && <Alert variant='danger'>{error}</Alert>}
-          {success && <Alert variant='success'>Job posted successfully!</Alert>}
 
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId='formTitle' className='mb-3'>
@@ -181,6 +191,7 @@ const handleSubmit = async (e) => {
             <Form.Label>Job type</Form.Label>
             <Form.Select
               name='jobType'
+              value={formData.jobType}
               onChange={handleChange}
               style={{ borderColor: 'black' }}
             >
